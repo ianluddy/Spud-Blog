@@ -32,4 +32,4 @@ app = django.core.handlers.wsgi.WSGIHandler()
 
 # Initialise DB
 from core.utils import initialise_db
-# initialise_db()
+initialise_db()

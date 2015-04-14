@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from google.appengine.ext import ndb
-from core.models import Post
+from core.models import Post, Blog
 from core.constants import LOREM, POST_TAGS, POST_TITLES
 import json, random, time, logging
 
@@ -31,20 +31,32 @@ def tag_filter(request, query):
     return query
 
 def initialise_db():
-    # Put some initial test data in the DB
-    empty_table(Post)
-    for i in range(12):
-        time.sleep(0.1)
-        add_post(str(i) + ": " + random.choice(POST_TITLES), LOREM, [random.choice(POST_TAGS)])
+    # Create an ancestor for all of our Posts to ensure consistency when manipulating Posts
+    blog_instance = Blog.query().get()
+    if not blog_instance:
+        blog_instance = Blog()
+        blog_instance.put()
 
-def add_post(title, body, tags):
+    # Put some initial test data in the DB
+    # empty_table(Post)
+    if not Post.query().fetch():
+        for i in range(12):
+            time.sleep(0.1)
+            add_post(str(i) + ": " + random.choice(POST_TITLES), LOREM, [random.choice(POST_TAGS)], blog_instance)
+
+def add_post(title, body, tags, parent):
     # Create a Post object and persist
     Post(
+        parent=parent.key,
         title=title,
         body=body,
         tags=tags,
         published=random.choice([True, True, False])
     ).put()
+
+def get_blog_key():
+    # Return our Blog key. There should only be one instance of Blog. This is used as an ancestor to all Posts.
+    return Blog.query().get().key
 
 def empty_table(model):
     # Empty given table
