@@ -21,19 +21,13 @@ function cache_elements(){
 /**** Posts ****/
 
 function load_posts(page){
-    // Page?
-    if( page == undefined )
-        page = 0;
-
-    // Tags?
-    var tags = get_selected_tags();
-
     show_loader(post_container);
     $.ajax({
         url: "posts",
         data: {
-            tags: JSON.stringify(tags),
-            page: page
+            tags: JSON.stringify(get_selected_tags()),
+            page: page == undefined ? 0 : page,
+            published_only: true
         }
     }).done(draw_posts);
 }

@@ -2,7 +2,7 @@
 
 {% block main %}
     <div class="row">
-        <div id="post_editor" class="large-8 columns" role="content">
+        <div id="post_editor" class="large-8 columns" role="content" current_post_id="">
             <div class="row">
 
                 <div class="large-6 columns">
@@ -25,10 +25,6 @@
                 </div>
 
                 <div class="large-6 columns">
-                    <div id="tag_container"></div>
-                </div>
-
-                <div class="large-6 columns">
                     <div class="row collapse prefix-radius">
                         <div class="small-3 columns">
                             <span class="prefix">Tags</span>
@@ -38,6 +34,8 @@
                         </div>
                     </div>
                 </div>
+
+                <div id="tag_container" class="large-6 columns"></div>
 
                 <div class="large-12 columns">
                     <label>
