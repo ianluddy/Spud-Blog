@@ -24,6 +24,7 @@ body {
     margin-right: 8px;
     margin-left: 0px;
 }
+
 /* Tags */
 #tags{
     padding-bottom: 26px;
@@ -38,10 +39,26 @@ body {
 #tags > .label.selected{
     opacity: 1;
 }
+/*
+#tag_container{
+    display: inline-block;
+    float: right;
+    position: relative;
+    top: 20px;
+}
+*/
 
 /* Posts */
 .post_stamp{
     color: #aaa;
+    display: inline-block;
+    float: left;
+}
+.post_header{
+    margin-bottom: 12px;
+}
+.post_tags{
+    margin-left: 12px;
 }
 .post{
     display: block;
@@ -109,6 +126,10 @@ body {
     color: #fff;
     background-color: #008CBA;
 }
+#post_preview_list{
+    height: 650px;
+    overflow: auto;
+}
 
 /* Editor */
 #post_editor .switch{
@@ -130,7 +151,7 @@ body {
 
 /* Textboxio */
 #ephox_post_body{
-    height: 400px !important;
+    height: 600px !important;
     margin-bottom: 20px !important;
 }
 .ephox-polish-editor-container, .ephox-polish-source-container {
