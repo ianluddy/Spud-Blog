@@ -28,3 +28,27 @@ indexes:
   - name: tags
   - name: stamp
     direction: desc
+
+- kind: Post
+  ancestor: yes
+  properties:
+  - name: published
+  - name: stamp
+
+- kind: Post
+  ancestor: yes
+  properties:
+  - name: published
+  - name: tags
+  - name: stamp
+
+- kind: Post
+  ancestor: yes
+  properties:
+  - name: stamp
+
+- kind: Post
+  ancestor: yes
+  properties:
+  - name: tags
+  - name: stamp
