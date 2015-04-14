@@ -1,6 +1,10 @@
 from google.appengine.ext import ndb
 import time
 
+class Blog(ndb.Model):
+    stamp = ndb.FloatProperty(default=time.time())
+    name = ndb.StringProperty()
+
 class Post(ndb.Model):
     stamp = ndb.FloatProperty(default=time.time())
     title = ndb.StringProperty(default="Untitled")
