@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <div class="row">
+        <div id="post_editor" class="large-8 columns" role="content">
+            <div class="row">
+
+                <div class="large-6 columns">
+                    <div class="row collapse prefix-radius">
+                        <div class="small-3 columns">
+                            <span class="prefix">Title</span>
+                        </div>
+                        <div class="small-9 columns">
+                            <input id="title_input" type="text" placeholder="title">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="large-6 columns">
+                    <div id="publish_switch" class="switch radius">
+                        <input id="switchName" type="checkbox">
+                        <label for="switchName"></label>
+                    </div>
+                    <span class="published_label">Publish</span>
+                </div>
+
+                <div class="large-6 columns">
+                    <div id="tag_container"></div>
+                </div>
+
+                <div class="large-6 columns">
+                    <div class="row collapse prefix-radius">
+                        <div class="small-3 columns">
+                            <span class="prefix">Tags</span>
+                        </div>
+                        <div class="small-9 columns">
+                            <input id="tag_input" type="text" placeholder="tags">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="large-12 columns">
+                    <label>
+                        <textarea id="post_body" placeholder="Post Body"></textarea>
+                    </label>
+                </div>
+                <div class="small-12 columns">
+                    <a id="save_post_btn" class="button tiny">Save</a>
+                </div>
+            </div>
+        </div>
+        <aside class="large-4 columns">
+            <a id="new_post" class="button expand tiny">
+                New Post
+            </a>
+            <div id="post_preview_list"></div>
+        </aside>
+    </div>
+{% endblock %}
+
+{% block import %}
+    <script type="text/javascript" src="js/vendor/textboxio.js"></script>
+    <script type="text/javascript" src="js/admin.js"></script>
+{% endblock %}

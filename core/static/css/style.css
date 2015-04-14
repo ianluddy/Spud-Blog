@@ -1,0 +1,192 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Header */
+#blog_title{
+    position: relative;
+    top: 10px;
+    font-size: 2.6em;
+}
+#blog_tagline{
+    float: right;
+    position: relative;
+    top: 49px;
+    font-style: italic;
+}
+#blog_icon{
+    background-image: url("/img/spud.png");
+    width: 60px;
+    height: 60px;
+    background-size: 60px;
+    background-repeat: no-repeat;
+    float: left;
+    margin-right: 8px;
+    margin-left: 0px;
+}
+/* Tags */
+#tags{
+    padding-bottom: 26px;
+}
+#tags > .label{
+    cursor: pointer;
+    opacity: 0.6;
+}
+#tags > .label:hover{
+    opacity: 0.8;
+}
+#tags > .label.selected{
+    opacity: 1;
+}
+
+/* Posts */
+.post_stamp{
+    color: #aaa;
+}
+.post{
+    display: block;
+    position: relative;
+}
+.feed_link{
+    text-align: center;
+    width: 100%;
+    display: block;
+}
+
+/* Post Previews */
+.post_preview .icons{
+    float: right;
+}
+.post_preview .icons > div{
+    display: inline-block;
+    font-size: 20px;
+    margin-right: 4px;
+    color: #999;
+    height: 27px;
+    width: 15px;
+}
+.post_preview .icons > div:hover{
+    cursor: pointer;
+    border-bottom: 2px solid;
+}
+.post_preview .icons > div.published{
+    color: #008CBA;
+}
+.post_preview.selected .icons > div{
+    color: #fff;
+}
+.post_preview.selected .icons > div.unpublished{
+    color: #aaa;
+}
+.post_preview{
+    padding: 10px;
+    cursor: pointer;
+    border-right: 5px solid #fff;
+}
+.post_preview > .stamp{
+    color: #aaa;
+}
+.post_preview > .title{
+    color: #008CBA;
+}
+.post_preview.selected > .stamp{
+    color: #ccc;
+}
+.post_preview.selected > .title{
+    color: #fff;
+}
+.post_preview:hover{
+    opacity: 0.8;
+    border-right: 5px solid #008CBA;
+}
+.post_preview:nth-child(even){
+    background-color: #f0f0f0;
+}
+.post_preview:nth-child(odd){
+    background-color: #f9f9f9;
+}
+.post_preview.selected, .post_preview.selected:hover{
+    color: #fff;
+    background-color: #008CBA;
+}
+
+/* Editor */
+#post_editor .switch{
+    float: right;
+    position: relative;
+    top: 3px;
+}
+.published_label{
+    float: right;
+    position: relative;
+    top: 8px;
+    font-size: 17px;
+    right: 10px;
+    padding-right: 10px;
+}
+.published_label i{
+    font-size: 20px;
+}
+
+/* Textboxio */
+#ephox_post_body{
+    height: 400px !important;
+    margin-bottom: 20px !important;
+}
+.ephox-polish-editor-container, .ephox-polish-source-container {
+    border-color: #ddd !important
+}
+.ephox-polish-layer-above-editor, .ephox-polish-toolbar-more{
+    background: #f2f2f2 !important;
+    border-right: none !important;
+    color: #333333 !important;
+    border-color: #cccccc !important;
+}
+.ephox-polish-toolbar{
+    box-shadow: none !important;
+}
+.ephox-pastry-button{
+    color: #333 !important;
+}
+.ephox-polish-toolbar-group{
+    border-right: none !important;
+    background-color: #f2f2f2 !important;
+}
+
+/* About */
+#about_handle{
+    position: absolute;
+    top: calc(50% - 50px);
+    height: 90px;
+    width: 20px;
+    left: -20px;
+    background-color: #008CBA;
+    cursor: pointer;
+}
+#about{
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    width: 300px;
+    background-color: #008CBA;
+    left: 100%;
+}
+
+/* Loader */
+.loader_overlay{
+    position: absolute;
+    background-color: #aaa;
+    opacity: 0.2;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+.loader{
+    position: absolute;
+    top: 45%;
+    bottom: 45%;
+    left: 45%;
+    right: 45%;
+}

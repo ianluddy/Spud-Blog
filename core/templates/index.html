@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <div class="row">
+        <div id="posts" class="large-9 columns" role="content">
+            <ul class="pagination" id="paginator">
+            </ul>
+        </div>
+        <aside class="large-3 columns">
+            <h5>Tags</h5>
+            <div id="tags"></div>
+            <div>
+                <a class="twitter-timeline" href="https://twitter.com/potatolondon" data-widget-id="586255659395612673">Tweets by @potatolondon</a>
+                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                <a class="feed_link" href="https://twitter.com/potatolondon">Read More →</a>
+            </div>
+        </aside>
+    </div>
+{% endblock %}
+
+{% block import %}
+    <script src="js/index.js"></script>
+{% endblock %}

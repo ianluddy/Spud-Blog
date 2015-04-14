@@ -1,0 +1,127 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Spud Blog</title>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="/css/foundation.min.css" />
+        <link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href="/css/foundation-icons.css" />
+    </head>
+    <body>
+
+    <div class="row">
+        <div class="large-12 columns">
+            <h1 id="blog_title">
+                <div id="blog_icon"></div>
+                Spud Blog
+                <small id="blog_tagline"></small>
+            </h1>
+            <hr/>
+        </div>
+    </div>
+
+    {% block main %}{% endblock %}
+
+    <div id="about">
+        <div id="about_handle">
+            <div class="fi-info"></div>
+        </div>
+    </div>
+
+    <footer class="row">
+        <div class="large-12 columns">
+            <hr/>
+            <div class="row">
+                <div class="large-6 columns">
+                    <p>© Copyright no one at all. Go to town.</p>
+                </div>
+                <div class="large-6 columns">
+                    <ul class="inline-list right">
+                        <li><a href="#">Link 1</a></li>
+                        <li><a href="#">Link 2</a></li>
+                        <li><a href="#">Link 3</a></li>
+                        <li><a href="#">Link 4</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/vendor/modernizr.js"></script>
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/foundation/foundation.min.js"></script>
+    <script src="js/vendor/handlebars-v3.0.0.js"></script>
+    <script src="js/vendor/moment.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/base.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
+    {% block import %}{% endblock %}
+  </body>
+</html>
+
+{% verbatim %}
+<script id="post_tmpl" type="text/x-handlebars-template">
+    <div class="post">
+        <article>
+            <h3><a href="#">{{title}}</a></h3>
+            <h6 class="post_stamp">{{hb_stamp stamp}}</h6>
+            <div class="row">
+                <div class="large-6 columns">
+                    {{body}}
+                </div>
+                <div class="large-6 columns">
+                    <img src="http://placehold.it/400x240&text=[img]"/>
+                </div>
+                <div class="large-6 columns">
+                    {{#tags}}
+                        <span class="success label">{{this}}</span>
+                    {{/tags}}
+                </div>
+            </div>
+        </article>
+        <hr/>
+    </div>
+</script>
+
+<script id="tag_tmpl" type="text/x-handlebars-template">
+    <span class="success label">{{this}}</span>
+</script>
+
+<script id="paginator_tmpl" type="text/x-handlebars-template">
+    <li class="arrow"><a>&laquo;</a></li>
+    {{#pages}}
+        <li class="pag"><a>{{ this }}</a></li>
+    {{/pages}}
+    <li class="arrow"><a>&raquo;</a></li>
+</script>
+
+<script id="post_preview_tmpl" type="text/x-handlebars-template">
+    <div class="post_preview">
+        <div class="icons">
+            <div class="delete fi-trash" post_id="{{id}}" title="Delete Post"></div>
+        </div>
+        <div class="title">
+            {{#eq published true}}
+                <span class="published fi-megaphone" title="Published"></span>
+            {{else}}
+                <!--<span class="unpublished fi-megaphone" title="Unpublished"></span>-->
+            {{/eq}}
+            {{title}}
+        </div>
+        <div class="stamp">{{hb_stamp stamp}}</div>
+    </div>
+</script>
+
+<script id="loader_tmpl" type="text/x-handlebars-template">
+    <div class="loader_overlay">
+        <div class="loader">
+            Loading
+        </div>
+    </div>
+</script>
+
+{% endverbatim %}

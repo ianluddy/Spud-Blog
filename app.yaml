@@ -1,0 +1,72 @@
+application: luddy-spud
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+builtins:
+- deferred: on
+
+libraries:
+- name: django
+  version: "1.5"
+
+inbound_services:
+- warmup
+
+handlers:
+
+- url: /(.*\.css)
+  mime_type: text/css
+  static_files: core/static/\1
+  upload: core/static/(.*\.css)
+
+- url: /(.*\.js)
+  mime_type: text/javascript
+  static_files: core/static/\1
+  upload: core/static/(.*\.js)
+
+- url: /(.*\.png)
+  mime_type: image/png
+  static_files: core/static/\1
+  upload: core/static/(.*\.png)
+
+- url: /(.*\.(svg|svgz))
+  mime_type: images/svg+xml
+  static_files: core/static/\1
+  upload: core/static/(.*\.(svg|svgz))
+
+- url: /(.*\.eot)
+  mime_type: application/vnd.ms-fontobject
+  static_files: core/static/\1
+  upload: core/static/(.*\.eot)
+
+- url: /(.*\.woff)
+  mime_type: application/x-font-woff
+  static_files: core/static/\1
+  upload: core/static/(.*\.woff)
+
+- url: /(.*\.ttf)
+  mime_type: font/truetype
+  static_files: core/static/\1
+  upload: core/static/(.*\.ttf)
+
+- url: /favicon.ico
+  static_files: favicon.ico
+  upload: favicon.ico
+
+- url: /appengine_sessions/clean-up/
+  script: main.app
+  login: admin
+
+- url: /.*
+  script: main.app
+
+skip_files:
+- ^(.*/)?app.yaml
+- ^(.*/)?app.yml
+- ^(.*/)?index.yaml
+- ^(.*/)?index.yml
+- ^(.*/)?.*\.py[co]
+- ^(.*/)?\..*
+- tmp
