@@ -1,4 +1,4 @@
-POST_PAGE_SIZE = 3
+POST_PAGE_SIZE = 1
 
 #### Test Data ####
 

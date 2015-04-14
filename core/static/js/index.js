@@ -35,6 +35,10 @@ function load_posts(page){
 function draw_posts(posts){
     $(post_container).find(".post").remove();
     for( var index in posts){
+        location.href = location.href.substring(0, location.href.indexOf("#")) +
+        "#" + posts[index].title.replace(" ","_").toLowerCase();
+        var new_post = posts[index]
+        new_post.link = location.href
         $(post_container).prepend(post_tmpl(posts[index]));
     }
     add_post_handlers();
