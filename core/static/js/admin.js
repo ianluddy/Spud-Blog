@@ -1,4 +1,4 @@
-var post_list_container, post_list_tmpl, editor, new_post_btn, tag_container;
+var post_list_container, post_list_tmpl, editor, new_post_btn, tag_container, about, about_handle;
 var tag_tmpl, tag_input, save_post_btn, title_input, publish_input, post_editor, post_body;
 $(document).ready(function() {
     cache_elements();
@@ -19,8 +19,11 @@ function cache_elements(){
     post_editor = $("#post_editor");
     post_body = $("#post_body");
     publish_input = $("#publish_switch");
+    about = $("#about");
+    about_handle = $("#about_handle");
+
     post_list_tmpl = Handlebars.compile($("#post_preview_tmpl").html());
-    tag_tmpl = Handlebars.compile($("#tag_tmpl").html());
+    tag_tmpl = Handlebars.compile($("#editable_tag_tmpl").html());
 }
 
 /**** Handlers ****/
@@ -28,6 +31,7 @@ function cache_elements(){
 function add_handlers(){
     $(new_post_btn).on("click", new_post);
     $(save_post_btn).on("click", save_post);
+    $(about_handle).on("click", toggle_about);
     $(tag_input).keypress(function(event){
         if( event.keyCode == 13){
             draw_tag($(tag_input).val());
@@ -44,6 +48,7 @@ function create_editor(){
 
 function draw_tag(tag){
     $(tag_container).append(tag_tmpl(tag));
+    $(tag_container).find(".remove").on("click", function(){$(this).parent().remove()});
 }
 
 function get_tags(){
@@ -82,6 +87,7 @@ function save_post(){
 /**** Posts ****/
 
 function load_post_list(){
+    show_loader(post_list_container);
     $.ajax({
         url: "posts",
         data:{
@@ -98,6 +104,7 @@ function draw_post_list(posts){
     $(post_list_container).find(".post_preview").on("click", select_post);
     $(post_list_container).find(".post_preview").first().click();
     $(post_list_container).find(".post_preview .delete").on("click", delete_post);
+    hide_loader(post_list_container);
 }
 
 function new_post(){
@@ -121,7 +128,7 @@ function load_post(post){
     $(post_editor).attr("current_post_id", loaded_post.id); // Load id
     $(title_input).val(loaded_post.title); // Load title
     editor.content.set(loaded_post.body); // Load body
-    $(tag_container).find(".label").remove(); // Clear Tags
+    $(tag_container).find(".post_tag").remove(); // Clear Tags
     for( var index in loaded_post.tags ){
         draw_tag(loaded_post.tags[index]); // Draw Tags
     }
@@ -137,4 +144,15 @@ function delete_post(){
             }
         }).success(load_post_list);
     }
+}
+
+/**** About ****/
+
+function toggle_about(){
+    if( $(about).hasClass("shown") ){
+        $(about).animate({"left": "100%"}, 100);
+    }else{
+        $(about).animate({"left": "70%"}, 100);
+    }
+    $(about).toggleClass("shown");
 }

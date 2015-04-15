@@ -3,7 +3,7 @@ function page_range(i){
 }
 
 function scroll_to_top(){
-    $("html, body").animate({ scrollTop: 0 }, 400);
+    $("html, body").animate({ scrollTop: 0 }, 200);
 }
 
 function format_timestamp(stamp){
@@ -12,10 +12,15 @@ function format_timestamp(stamp){
 
 function show_loader(dom){
     $(dom).append(loader_tmpl());
+    $(dom).find(".loader_overlay").fadeIn(200, function(){
+        $(dom).find(".loader_overlay .spinner").show();
+    });
 }
 
 function hide_loader(dom){
-    $(dom).find(".loader_overlay").remove();
+    $(dom).find(".loader_overlay").stop().fadeOut(200, function(){
+        $(dom).find(".loader_overlay").remove();
+    });
 }
 
 /**** Handlerbars helpers ****/

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+<!-- Admin Page -->
 {% block main %}
     <div class="row">
         <div id="post_editor" class="large-8 columns" role="content" current_post_id="">
@@ -24,6 +25,12 @@
                     <span class="published_label">Publish</span>
                 </div>
 
+                <div class="large-12 columns">
+                    <label>
+                        <textarea id="post_body" placeholder="Post Body"></textarea>
+                    </label>
+                </div>
+
                 <div class="large-6 columns">
                     <div class="row collapse prefix-radius">
                         <div class="small-3 columns">
@@ -37,14 +44,10 @@
 
                 <div id="tag_container" class="large-6 columns"></div>
 
-                <div class="large-12 columns">
-                    <label>
-                        <textarea id="post_body" placeholder="Post Body"></textarea>
-                    </label>
-                </div>
                 <div class="small-12 columns">
                     <a id="save_post_btn" class="button tiny">Save</a>
                 </div>
+
             </div>
         </div>
         <aside class="large-4 columns">
@@ -54,7 +57,59 @@
             <div id="post_preview_list"></div>
         </aside>
     </div>
+
+    <div id="about">
+        <div id="about_handle">
+            <span>About</span>
+        </div>
+        <p>Lightweight Blogging tool written with Django and deployed using Google App Engine.</p>
+        <p>
+            <span class="fi-social-github"></span>
+            <span>
+                <a href="http://github.com/ianluddy/Spud-Blog">github.com/ianluddy/Spud-Blog</a>
+            </span>
+        </p>
+        <div class="resources">Resources:</div>
+        <div>
+            <span class="fi-cloud"></span>
+            <span>
+                <a href="https://cloud.google.com/appengine/">cloud.google.com/appengine</a>
+            </span>
+        </div>
+        <div>
+            <span class="fi-widget"></span>
+            <span>
+                <a href="http://github.com/potatolondon/djappengine">potatolondon/djappengine</a>
+            </span>
+        </div>
+        <div>
+            <span class="fi-page-edit"></span>
+            <span>
+                <a href="http://textbox.io/">textbox.io</a>
+            </span>
+        </div>
+        <div>
+            <span class="fi-clock"></span>
+            <span>
+                <a href="http://momentjs.com/">momentjs.com</a>
+            </span>
+        </div>
+        <div>
+            <span class="fi-page-copy"></span>
+            <span>
+                <a href="http://handlebarsjs.com/">handlebarsjs.com</a>
+            </span>
+        </div>
+        <div>
+            <span class="fi-tablet-landscape"></span>
+            <span>
+                <a href="http://foundation.zurb.com/">foundation.zurb.com/</a>
+            </span>
+        </div>
+    </div>
 {% endblock %}
+
+<!-- JS Import -->
 
 {% block import %}
     <script type="text/javascript" src="js/vendor/textboxio.js"></script>

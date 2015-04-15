@@ -1,4 +1,4 @@
-var post_container, tag_container, paginator_container, post_tmpl, tag_tmpl, paginator_tmpl;
+var post_container, tag_container, paginator_container, post_tmpl, tag_tmpl, paginator_tmpl;;//, url_post_id;
 $(document).ready(function() {
     cache_elements();
     load_page_count();
@@ -9,6 +9,7 @@ $(document).ready(function() {
 /**** Cache ****/
 
 function cache_elements(){
+    // Cache DOM elements
     post_container = $("#posts");
     tag_container = $("#tags");
     paginator_container = $("#paginator");
@@ -21,6 +22,7 @@ function cache_elements(){
 /**** Posts ****/
 
 function load_posts(page){
+    // Load Posts by page
     show_loader(post_container);
     $.ajax({
         url: "posts",
@@ -33,31 +35,27 @@ function load_posts(page){
 }
 
 function draw_posts(posts){
+    // Draw the Posts we've loaded
     $(post_container).find(".post").remove();
-    for( var index in posts){
-        location.href = location.href.substring(0, location.href.indexOf("#")) +
-        "#" + posts[index].title.replace(" ","_").toLowerCase();
-        var new_post = posts[index]
-        new_post.link = location.href
+    for (var index in posts) {
+        var new_post = posts[index];
+        new_post.link = location.href + "#" + new_post.id;
         $(post_container).prepend(post_tmpl(posts[index]));
     }
-    add_post_handlers();
     hide_loader(post_container);
-}
-
-function add_post_handlers(){
-
 }
 
 /**** Tags ****/
 
 function load_tags(){
+    // Load all Tags
     $.ajax({
         url: "tags"
     }).done(draw_tags);
 }
 
 function draw_tags(tags){
+    // Draw given Tags
     for(var index in tags){
         $(tag_container).prepend(tag_tmpl(tags[index]));
     }
@@ -65,8 +63,10 @@ function draw_tags(tags){
 }
 
 function add_tag_handlers(){
+    // Tag handlers
     function apply_tag_filter(){
         $(this).toggleClass("selected");
+        scroll_to_top();
         load_posts();
         load_page_count();
     }
@@ -74,6 +74,7 @@ function add_tag_handlers(){
 }
 
 function get_selected_tags(){
+    // Get list of selected Tags
     var tags = [];
     $(tag_container).find(".label.selected").each(function(){
         tags.push($(this).text());
@@ -81,32 +82,33 @@ function get_selected_tags(){
     return tags;
 }
 
-
 /**** Pagination ****/
 
 function load_page_count(){
-    // Number of pages depends on tags applied
-    var tags = get_selected_tags();
+    // Load number of pages (depends on selected Tags)
     $.ajax({
         url: "pages",
         type: 'GET',
-        data: {tags:JSON.stringify(tags)}
+        data: {tags:JSON.stringify(get_selected_tags())} // Number of pages depends on tags applied
     }).done(draw_paginator);
 }
 
 function draw_paginator(page_count){
+    // Add pagination div
     $(paginator_container).html(paginator_tmpl({"pages": page_range(page_count)}))
     select_page($(paginator_container).find(".pag").first());
     add_paginator_handlers();
 }
 
 function add_paginator_handlers(){
+    // Add pagination div handlers
     $(paginator_container).find(".pag").on("click", load_page);
     $(paginator_container).find(".arrow").first().on("click", previous_page);
     $(paginator_container).find(".arrow").last().on("click", next_page);
 }
 
 function previous_page(){
+    // Prev page
     var new_index = $(paginator_container).find(".pag.current").index() - 2;
     if( new_index < 0)
         return
@@ -114,6 +116,7 @@ function previous_page(){
 }
 
 function next_page(){
+    // Next page
     var new_index = $(paginator_container).find(".pag.current").index();
     var next = $(paginator_container).find(".pag").get(new_index);
     if( next == undefined)
@@ -122,12 +125,13 @@ function next_page(){
 }
 
 function select_page(dom){
+    // Select specific page
     $(dom).addClass("current").siblings().removeClass("current");
 }
 
 function load_page(){
-    select_page($(this));
-    var page = parseInt($(this).index()) - 1;
-    load_posts(page);
+    // Load page
     scroll_to_top();
+    select_page($(this));
+    load_posts(parseInt($(this).index()) - 1);
 }

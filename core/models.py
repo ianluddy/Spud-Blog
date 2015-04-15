@@ -9,7 +9,6 @@ class Post(ndb.Model):
     stamp = ndb.FloatProperty(default=time.time())
     title = ndb.StringProperty(default="Untitled")
     body = ndb.TextProperty(default="Empty")
-    image = ndb.BlobProperty()
     tags = ndb.StringProperty(repeated=True)
     published = ndb.BooleanProperty(default=False)
 

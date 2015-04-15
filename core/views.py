@@ -106,7 +106,7 @@ def update_post(request):
     if "publish" in request.GET:
         post.published = request.GET.get("publish", "").lower() in ["true", "1"]
     if "tags" in request.GET:
-        post.tags = json.loads(request.GET.get("tags")) if "tags" in request.GET else []
+        post.tags = json.loads(request.GET.get("tags").lower()) if "tags" in request.GET else []
 
     # Persist
     try:
@@ -129,12 +129,28 @@ def pages(request):
     post_query = Post.query().filter(Post.published == True)
 
     # Apply Tag filter
-    tags = json.loads(request.GET.get("tags")) if "tags" in request.GET else []
+    tags = json.loads(request.GET.get("tags").lower()) if "tags" in request.GET else []
     if tags:
         post_query = post_query.filter(Post.tags.IN(tags))
 
     return HttpResponse(page_count(post_query.count(), POST_PAGE_SIZE))
 
+def post_page(request):
+    """
+    Get Page number of given Post
+    :param id LONG id of Post
+    :param tags LIST of tags to filter on [optional]
+    :return: INT
+    """
+    # Grab all published Posts
+    post_query = Post.query().filter(Post.published == True)
+
+    # Apply Tag filter
+    tags = json.loads(request.GET.get("tags").lower()) if "tags" in request.GET else []
+    if tags:
+        post_query = post_query.filter(Post.tags.IN(tags))
+
+    return HttpResponse(page_count(post_query.count(), POST_PAGE_SIZE))
 
 def tags(request):
     """

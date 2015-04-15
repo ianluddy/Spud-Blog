@@ -23,6 +23,7 @@ body {
     float: left;
     margin-right: 8px;
     margin-left: 0px;
+    cursor: pointer;
 }
 
 /* Tags */
@@ -39,14 +40,23 @@ body {
 #tags > .label.selected{
     opacity: 1;
 }
-/*
-#tag_container{
-    display: inline-block;
-    float: right;
+.post_tag .remove{
+    font-size: 20px;
+    color: #000;
     position: relative;
-    top: 20px;
+    left: -10px;
+    bottom: 11px;
+    cursor: pointer;
 }
-*/
+.post_tag .remove:hover{
+    opacity: 0.6;
+}
+.post_tag .label{
+    font-size: 14px;
+}
+#tag_container{
+    margin-bottom: 10px !important;
+}
 
 /* Posts */
 .post_stamp{
@@ -69,6 +79,9 @@ body {
     width: 100%;
     display: block;
 }
+#posts{
+    min-height: 400px;
+}
 
 /* Post Previews */
 .post_preview .icons{
@@ -86,14 +99,8 @@ body {
     cursor: pointer;
     border-bottom: 2px solid;
 }
-.post_preview .icons > div.published{
-    color: #008CBA;
-}
 .post_preview.selected .icons > div{
     color: #fff;
-}
-.post_preview.selected .icons > div.unpublished{
-    color: #aaa;
 }
 .post_preview{
     padding: 10px;
@@ -105,6 +112,12 @@ body {
 }
 .post_preview > .title{
     color: #008CBA;
+}
+.post_preview > .title > .published, .post_preview > .title > .unpublished{
+    margin-right: 5px;
+}
+.post_preview > .title > .unpublished{
+    opacity: 0.3;
 }
 .post_preview.selected > .stamp{
     color: #ccc;
@@ -127,7 +140,7 @@ body {
     background-color: #008CBA;
 }
 #post_preview_list{
-    height: 650px;
+    max-height: 650px;
     overflow: auto;
 }
 
@@ -147,6 +160,9 @@ body {
 }
 .published_label i{
     font-size: 20px;
+}
+#publish_switch{
+    margin-bottom: 10px;
 }
 
 /* Textboxio */
@@ -177,37 +193,134 @@ body {
 /* About */
 #about_handle{
     position: absolute;
-    top: calc(50% - 50px);
-    height: 90px;
-    width: 20px;
-    left: -20px;
+    top: calc(50% - 27px);
+    height: 37px;
+    width: 98px;
+    left: -67px;
     background-color: #008CBA;
+    color: #fff;
     cursor: pointer;
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    text-align: center;
+    vertical-align: middle;
+    line-height: 32px;
+    border: 2px solid #333;
+    border-bottom: 2px solid #008CBA;
+    z-index: 1001;
 }
 #about{
     position: fixed;
     top: 0px;
     bottom: 0px;
     right: 0px;
-    width: 300px;
-    background-color: #008CBA;
+    width: 30%;
     left: 100%;
+    background: #008CBA;
+    z-index: 1000;
+    border-left: 2px solid #333;
+    padding: 20px;
+    color: #fff;
+}
+#about a, #about h5{
+    color: #fff;
+}
+#about span{
+    margin-right: 5px;
+}
+#about .resources{
+    padding-bottom: 3px;
+    font-size: 1.2em;
 }
 
 /* Loader */
 .loader_overlay{
     position: absolute;
-    background-color: #aaa;
-    opacity: 0.2;
+    background-color: #fff;
+    display: none;
+    opacity: 0.8;
     top: 0px;
     left: 0px;
     right: 0px;
     bottom: 0px;
 }
-.loader{
+.spinner {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 10px;
     position: absolute;
     top: 45%;
-    bottom: 45%;
     left: 45%;
-    right: 45%;
+    display: none;
+}
+
+.spinner > div {
+  background-color: #008CBA;
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+  animation: stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes stretchdelay {
+  0%, 40%, 100% {
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% {
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+
+/* Footer */
+.git{
+    float: right;
+    position: relative;
+    bottom: 10px;
+}
+.fi-social-github{
+    font-size: 27px;
+    position: relative;
+    top: 4px;
+    right: 4px;
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+    #about{
+        display: none;
+    }
+    #about_handle{
+        display: none;
+    }
 }

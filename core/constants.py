@@ -1,3 +1,6 @@
+# Number of Posts per page. I'm using 1 here as the page gets quite busy with multiple Posts, especially since adding the
+# facebook comment input.
+# If one was to build on top of the API they could tweak this and have multiple Posts shown on their front end.
 POST_PAGE_SIZE = 1
 
 #### Test Data ####
