@@ -182,9 +182,8 @@ function validate_page_number(page_number){
         if( page_number < 1 )
             return 1;
         return page_number;
-    }
-    catch(err) {
-        return 1
+    }catch(err){
+        return 1;
     }
 }
 
