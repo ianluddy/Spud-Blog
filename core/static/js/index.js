@@ -56,44 +56,37 @@ function draw_posts(posts){
     if( posts.length == 0 )
         return load_page(1);
 
+    // Clear out the Posts
+    var refresh_fb_widget = false;
+    if( $(post_container).find(".post").length > 0 ){
+        remove_posts();
+        refresh_fb_widget = true;
+    }
+
     // Draw the Posts we've loaded
-    remove_posts();
-    remove_fb_input();
     for (var index in posts) {
         var new_post = posts[index];
         new_post.link = location.href + "#" + new_post.id;
         $(post_container).prepend(post_tmpl(posts[index]));
     }
-    add_fb_input();
+
+    // Re-generate FB widget
+    if( refresh_fb_widget == true ){
+        refresh_fb_input();
+    }
     hide_loader(post_container);
 }
 
 function remove_posts(){
     $(post_container).find(".post").remove();
-}
-
-function remove_fb_input(){
     $(post_container).find(".fb-comments").remove();
-    //$("#fb-root").remove();
 }
 
-function add_fb_input(){
-    //$("body").append('<div id="fb-root"></div>');
-    //(function(d, s, id) {
-    //  var js, fjs = d.getElementsByTagName(s)[0];
-    //  if (d.getElementById(id)) return;
-    //  js = d.createElement(s); js.id = id;
-    //  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.3&appId=293357874188447";
-    //  console.log(js.src);
-    //    fjs.parentNode.insertBefore(js, fjs);
-    //}(document, 'script', 'facebook-jssdk'));
-
-    //if( FB != undefined) {
-    //    FB.XFBML.parse($(post_container).find(".fb-comments"), function () {
-    //        $(".FB_Loader").remove();
-    //    });
-    //}
-
+function refresh_fb_input(){
+    var scriptText = 'FB.XFBML.parse();';
+    var scriptNode = document.createElement('script');
+    scriptNode.appendChild(document.createTextNode(scriptText));
+    $("body").append(scriptNode);
 }
 
 /**** Tags ****/
