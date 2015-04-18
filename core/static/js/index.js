@@ -141,14 +141,9 @@ function load_page_count(){
 
 function draw_paginator(page_count){
     // Add pagination div
-    $(paginator_container).html(paginator_tmpl({"pages": page_range(page_count)}));
-    add_paginator_handlers();
-}
-
-function draw_paginator(page_count){
-    // Add pagination div
-    $(paginator_container).html(paginator_tmpl({"pages": page_range(page_count)}));
-    add_paginator_handlers();
+    if( page_count > 0)
+        $(paginator_container).html(paginator_tmpl({"pages": page_range(page_count)}));
+        add_paginator_handlers();
 }
 
 function add_paginator_handlers(){
