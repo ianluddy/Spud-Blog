@@ -2,8 +2,8 @@ function page_range(i){
     return i?page_range(i-1).concat(i):[]
 }
 
-function scroll_to_top(){
-    $("html, body").animate({ scrollTop: 0 }, 200);
+function scroll_to_top(func){
+    $("html, body").animate({ scrollTop: 0 }, 200, func);
 }
 
 function format_timestamp(stamp){

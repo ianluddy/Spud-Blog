@@ -38,7 +38,6 @@ def initialise_db():
         blog_instance.put()
 
     # Put some initial test data in the DB
-    # empty_table(Post)
     if not Post.query().fetch():
         for i in range(12):
             time.sleep(0.1)

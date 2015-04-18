@@ -36,7 +36,7 @@ def posts(request):
         iterator = [post] if post else []
     else:
         # If no ID specified, get all Posts ordered by stamp for our Blog
-        post_query = Post.query(ancestor=get_blog_key()).order(Post.stamp)
+        post_query = Post.query(ancestor=get_blog_key()).order(-Post.stamp)
 
         # Published filter
         if published_only:

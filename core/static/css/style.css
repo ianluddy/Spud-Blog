@@ -90,10 +90,8 @@ body {
 .post_preview .icons > div{
     display: inline-block;
     font-size: 20px;
-    margin-right: 4px;
-    color: #999;
     height: 27px;
-    width: 15px;
+    color: #008CBA;
 }
 .post_preview .icons > div:hover{
     cursor: pointer;
@@ -109,6 +107,9 @@ body {
 }
 .post_preview > .stamp{
     color: #aaa;
+}
+.post_preview .unsaved{
+    display: none;
 }
 .post_preview > .title{
     color: #008CBA;
@@ -189,6 +190,16 @@ body {
     border-right: none !important;
     background-color: #f2f2f2 !important;
 }
+.ephox-pastry-button{
+    background: none !important;
+}
+
+/* Alertify */
+.alertify-log-success{
+    background-color: #008CBA !important;
+    font-family: 'Open Sans', sans-serif !important;
+    text-shadow: none !important;
+}
 
 /* About */
 #about_handle{
@@ -208,7 +219,7 @@ body {
     text-align: center;
     vertical-align: middle;
     line-height: 32px;
-    border: 2px solid #333;
+    border: 2px solid #007dba;
     border-bottom: 2px solid #008CBA;
     z-index: 1001;
 }
@@ -221,12 +232,15 @@ body {
     left: 100%;
     background: #008CBA;
     z-index: 1000;
-    border-left: 2px solid #333;
+    border-left: 2px solid #007dba;
     padding: 20px;
     color: #fff;
 }
 #about a, #about h5{
     color: #fff;
+}
+#about a:hover{
+    opacity: 0.5;
 }
 #about span{
     margin-right: 5px;

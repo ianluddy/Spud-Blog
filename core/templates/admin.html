@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
-<!-- Admin Page -->
+{% block style %}
+    <link rel="stylesheet" href="/css/alertify.core.css" />
+    <link rel="stylesheet" href="/css/alertify.default.css" />
+{% endblock %}
+
 {% block main %}
     <div class="row">
         <div id="post_editor" class="large-8 columns" role="content" current_post_id="">
@@ -103,15 +107,20 @@
         <div>
             <span class="fi-tablet-landscape"></span>
             <span>
-                <a href="http://foundation.zurb.com/">foundation.zurb.com/</a>
+                <a href="http://foundation.zurb.com/">foundation.zurb.com</a>
+            </span>
+        </div>
+        <div>
+            <span class="fi-megaphone"></span>
+            <span>
+                <a href="http://fabien-d.github.io/alertify.js/">fabien-d.github.io/alertify.js</a>
             </span>
         </div>
     </div>
 {% endblock %}
 
-<!-- JS Import -->
-
 {% block import %}
+    <script type="text/javascript" src="js/vendor/alertify.min.js"></script>
     <script type="text/javascript" src="js/vendor/textboxio.js"></script>
     <script type="text/javascript" src="js/admin.js"></script>
 {% endblock %}
