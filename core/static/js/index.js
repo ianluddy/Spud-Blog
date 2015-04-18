@@ -2,9 +2,10 @@ var post_container, tag_container, paginator_container, post_tmpl, tag_tmpl, pag
 $(document).ready(function() {
     cache_elements();
     load_page_number();
-    update_page_number();
+    update_url_page_number();
     load_page_count();
     load_tags();
+    load_page(page_number);
 });
 
 /**** Cache ****/
@@ -26,13 +27,14 @@ function cache_elements(){
 function load_page_number() {
     // Grab page number from URL bar if available
     page_number = 1;
-    if (location.href.indexOf("#") != -1)
-        page_number = parseInt(location.href.substring(location.href.indexOf("#") + 2, location.href.length));
+    if( top.location.hash.length > 0 ) {
+        page_number = parseInt(top.location.hash.substring(2, top.location.hash.length));
+    }
 }
 
-function update_page_number(){
+function update_url_page_number(){
     // Update our URL with the current page number if it's missing
-    top.location = "#p" + page_number.toString();
+    top.location.hash = "#p" + page_number.toString();
 }
 
 /**** Posts ****/
@@ -40,7 +42,7 @@ function update_page_number(){
 function load_posts(){
     // Load Posts by page
     show_loader(post_container);
-    update_page_number();
+    update_url_page_number();
     $.ajax({
         url: "posts",
         data: {
@@ -66,7 +68,7 @@ function draw_posts(posts){
     // Draw the Posts we've loaded
     for (var index in posts) {
         var new_post = posts[index];
-        new_post.link = location.href + "#" + new_post.id;
+        new_post.link = location.origin + "#" + new_post.id;
         $(post_container).prepend(post_tmpl(posts[index]));
     }
 
@@ -75,6 +77,7 @@ function draw_posts(posts){
         refresh_fb_input();
     }
     hide_loader(post_container);
+    highlight_page_selector();
 }
 
 function remove_posts(){
@@ -138,9 +141,14 @@ function load_page_count(){
 
 function draw_paginator(page_count){
     // Add pagination div
-    $(paginator_container).html(paginator_tmpl({"pages": page_range(page_count)}))
+    $(paginator_container).html(paginator_tmpl({"pages": page_range(page_count)}));
     add_paginator_handlers();
-    $(paginator_container).find(".pag").first().click();
+}
+
+function draw_paginator(page_count){
+    // Add pagination div
+    $(paginator_container).html(paginator_tmpl({"pages": page_range(page_count)}));
+    add_paginator_handlers();
 }
 
 function add_paginator_handlers(){
@@ -154,7 +162,7 @@ function previous_page(){
     // Prev page
     var new_index = $(paginator_container).find(".pag.current").index() - 2;
     if( new_index < 0)
-        return
+        return null;
     $(paginator_container).find(".pag").get(new_index).click();
 }
 
@@ -163,7 +171,7 @@ function next_page(){
     var new_index = $(paginator_container).find(".pag.current").index();
     var next = $(paginator_container).find(".pag").get(new_index);
     if( next == undefined)
-        return
+        return null;
     $(next).click();
 }
 
@@ -177,7 +185,7 @@ function validate_page_number(page_number){
     try {
         page_number = parseInt(page_number);
         if( page_number < 1 )
-            return 1
+            return 1;
         return page_number;
     }
     catch(err) {
@@ -185,13 +193,14 @@ function validate_page_number(page_number){
     }
 }
 
-function load_page(page){
-    page_number = validate_page_number(page);
-
-    // Highlight DOM
+function highlight_page_selector(){
+    // Highlight paginator if it was drawn after the Posts were retrieved
     var paginator_element = $(".pag").get(page_number - 1);
     $(paginator_element).addClass("current").siblings().removeClass("current");
+}
 
-    // Load page
+function load_page(page){
+    // Load given page if valid, otherwise load page 1
+    page_number = validate_page_number(page);
     scroll_to_top(load_posts);
 }
