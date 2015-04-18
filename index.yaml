@@ -73,3 +73,10 @@ indexes:
   properties:
   - name: tags
   - name: stamp
+
+- kind: Post
+  ancestor: yes
+  properties:
+  - name: tags
+  - name: stamp
+    direction: desc

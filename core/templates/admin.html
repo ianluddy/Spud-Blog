@@ -1,12 +1,22 @@
 {% extends "base.html" %}
 
-{% block style %}
-    <link rel="stylesheet" href="/css/alertify.core.css" />
+<!-- CSS Import -->
+{% block importCSS %}
     <link rel="stylesheet" href="/css/alertify.default.css" />
+    <link rel="stylesheet" href="/css/alertify.core.css" />
+    <link rel="stylesheet" href="/css/admin.css" />
 {% endblock %}
 
+<!-- JS Import -->
+{% block importJS %}
+    <script type="text/javascript" src="js/vendor/alertify.min.js"></script>
+    <script type="text/javascript" src="js/vendor/textboxio.js"></script>
+    <script type="text/javascript" src="js/admin.js"></script>
+{% endblock %}
+
+<!-- Admin Page -->
 {% block main %}
-    <div class="row">
+    <div id="admin" class="row">
         <div id="post_editor" class="large-8 columns" role="content" current_post_id="">
             <div class="row">
 
@@ -48,79 +58,14 @@
 
                 <div id="tag_container" class="large-6 columns"></div>
 
-                <div class="small-12 columns">
-                    <a id="save_post_btn" class="button tiny">Save</a>
-                </div>
-
             </div>
         </div>
         <aside class="large-4 columns">
-            <a id="new_post" class="button expand tiny">
-                New Post
-            </a>
+            <a id="save_post_btn" class="button expand">Save <span class="fi-save"></span></a>
+            <a id="new_post" class="button expand">New Post <span class="fi-page-edit"></span></a>
             <div id="post_preview_list"></div>
         </aside>
     </div>
 
-    <div id="about">
-        <div id="about_handle">
-            <span>About</span>
-        </div>
-        <p>Lightweight Blogging tool written with Django and deployed using Google App Engine.</p>
-        <p>
-            <span class="fi-social-github"></span>
-            <span>
-                <a href="http://github.com/ianluddy/Spud-Blog">github.com/ianluddy/Spud-Blog</a>
-            </span>
-        </p>
-        <div class="resources">Resources:</div>
-        <div>
-            <span class="fi-cloud"></span>
-            <span>
-                <a href="https://cloud.google.com/appengine/">cloud.google.com/appengine</a>
-            </span>
-        </div>
-        <div>
-            <span class="fi-widget"></span>
-            <span>
-                <a href="http://github.com/potatolondon/djappengine">potatolondon/djappengine</a>
-            </span>
-        </div>
-        <div>
-            <span class="fi-page-edit"></span>
-            <span>
-                <a href="http://textbox.io/">textbox.io</a>
-            </span>
-        </div>
-        <div>
-            <span class="fi-clock"></span>
-            <span>
-                <a href="http://momentjs.com/">momentjs.com</a>
-            </span>
-        </div>
-        <div>
-            <span class="fi-page-copy"></span>
-            <span>
-                <a href="http://handlebarsjs.com/">handlebarsjs.com</a>
-            </span>
-        </div>
-        <div>
-            <span class="fi-tablet-landscape"></span>
-            <span>
-                <a href="http://foundation.zurb.com/">foundation.zurb.com</a>
-            </span>
-        </div>
-        <div>
-            <span class="fi-megaphone"></span>
-            <span>
-                <a href="http://fabien-d.github.io/alertify.js/">fabien-d.github.io/alertify.js</a>
-            </span>
-        </div>
-    </div>
 {% endblock %}
 
-{% block import %}
-    <script type="text/javascript" src="js/vendor/alertify.min.js"></script>
-    <script type="text/javascript" src="js/vendor/textboxio.js"></script>
-    <script type="text/javascript" src="js/admin.js"></script>
-{% endblock %}

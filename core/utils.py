@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from functools import wraps
 from google.appengine.ext import ndb
 from core.models import Post, Blog
 from core.constants import LOREM, POST_TAGS, POST_TITLES
@@ -60,3 +61,31 @@ def get_blog_key():
 def empty_table(model):
     # Empty given table
     ndb.delete_multi(model.query().fetch(keys_only=True))
+
+def parse_parameters(str_list=[], bool_list=[], json_list=[], int_list=[]):
+    # Parse parameters from the request object and cast to whatever we think they should be
+    # Then pass on to the View
+    def decorator(view):
+        @wraps(view)
+        def wrapper(request, *args, **kwargs):
+            keyword_args = {}
+
+            # Grab Strings
+            for key in str_list:
+                keyword_args[key] = request.GET.get(key)
+
+            # Parse booleans
+            for key in bool_list:
+                keyword_args[key] = True if request.GET.get(key, "").lower() in ["true", "1"] else False
+
+            # Parse JSON
+            for key in json_list:
+                keyword_args[key] = json.loads(request.GET.get(key)) if key in request.GET else []
+
+            # Parse Ints
+            for key in int_list:
+                keyword_args[key] = long(request.GET.get(key)) if key in request.GET else None
+
+            return view(request, *args, **keyword_args)
+        return wrapper
+    return decorator

@@ -1,9 +1,3 @@
-<!--
-We insert the base.html file here and on top of that we load admin.html or index.html
-That way all the handlebar templates are available on all pages.
--->
-{% block base %}{% endblock %}
-
 {% verbatim %}
     <script id="post_tmpl" type="text/x-handlebars-template">
         <div class="post">
@@ -44,11 +38,11 @@ That way all the handlebar templates are available on all pages.
     </script>
 
     <script id="paginator_tmpl" type="text/x-handlebars-template">
-        <li class="arrow"><a>&laquo;</a></li>
+        <li class="arrow"><a>Previous &laquo;</a></li>
         {{#pages}}
             <li class="pag"><a>{{this}}</a></li>
         {{/pages}}
-        <li class="arrow"><a>&raquo;</a></li>
+        <li class="arrow"><a>Next &raquo;</a></li>
     </script>
 
     <script id="post_preview_tmpl" type="text/x-handlebars-template">

@@ -1,11 +1,11 @@
 from django.views.generic import TemplateView
 from django.http import HttpResponse
+from django.views.decorators.http import require_http_methods
 import logging
-import json
 
 from core.constants import POST_PAGE_SIZE
-from core.models import Post, Blog
-from core.utils import json_response, flatten_list, page_count, get_blog_key
+from core.models import Post
+from core.utils import json_response, flatten_list, page_count, get_blog_key, parse_parameters
 
 ######## Pages ########
 
@@ -14,22 +14,18 @@ admin = TemplateView.as_view(template_name='admin.html')  # Admin page
 
 ######## API ########
 
-def posts(request):
+@require_http_methods(["GET"])
+@parse_parameters(bool_list=["titles_only", "published_only"], json_list=["tags"], int_list=["page", "post_id"])
+def posts(request, post_id=None, tags=None, page=None, titles_only=False, published_only=False):
     """
     Get Published Blog Posts
-    :param tags LIST of tags to filter on [optional]
-    :param page INT page number of Posts to return [optional]
-    :param titles_only BOOLEAN return Post titles and stamps only [optional]
-    :param published_only BOOLEAN return published Posts only [optional]
+    :param tags [LIST] of tags to filter on [optional]
+    :param page [INT] page number of Posts to return [optional]
+    :param titles_only [BOOLEAN] return Post titles and stamps only [optional]
+    :param published_only [BOOLEAN] return published Posts only [optional]
+    :param post_id [LONG] Post identifier [optional]
     :return: LIST
     """
-    # Grab any parameters we can
-    published_only = request.GET.get("published_only", "").lower() in ["true", "1"]
-    titles_only = request.GET.get("titles_only", "").lower() in ["true", "1"]
-    page_number = int(request.GET.get("page")) if "page" in request.GET else None
-    tags = json.loads(request.GET.get("tags")) if "tags" in request.GET else []
-    post_id = long(request.GET.get("id")) if "id" in request.GET else None
-
     # ID filter (if we get an ID parameter lets assume the user wants all the info on that Post)
     if post_id:
         post = Post.get_by_id(post_id, parent=get_blog_key())
@@ -47,8 +43,8 @@ def posts(request):
             post_query = post_query.filter(Post.tags.IN(tags))
 
         # Page Filter
-        if page_number is not None:
-            iterator = post_query.fetch(POST_PAGE_SIZE, offset=page_number * POST_PAGE_SIZE)
+        if page is not None:
+            iterator = post_query.fetch(POST_PAGE_SIZE, offset=page * POST_PAGE_SIZE)
         else:
             iterator = post_query.fetch()
 
@@ -60,16 +56,14 @@ def posts(request):
 
     return response
 
-
-def delete_post(request):
+@require_http_methods(["GET", "POST"])
+@parse_parameters(int_list=["post_id"])
+def delete_post(request, post_id):
     """
     Delete Blog Post
-    :param: id LONG id of post to delete
+    :param: post_id LONG id of post to delete
     :return: BOOL success or failure
     """
-    # Grab Post ID
-    post_id = long(request.GET.get("id")) if "id" in request.GET else None
-
     # Attempt to delete the Post
     try:
         Post.get_by_id(post_id, parent=get_blog_key()).key.delete()
@@ -80,18 +74,18 @@ def delete_post(request):
 
     return HttpResponse(success)
 
-
-def update_post(request):
+@require_http_methods(["GET", "POST"])
+@parse_parameters(str_list=["title", "body"], bool_list=["published"], json_list=["tags"], int_list=["post_id"])
+def update_post(request, post_id=None, title=None, body=None, published=False, tags=None):
     """
     Add/Edit Blog Post
-    :param: id LONG id of post to update [optional]
-    :param: title STR post title [optional]
-    :param: body STR post body [optional]
-    :param: published BOOL post published flag [optional]
-    :return: BOOL success or failure
+    :param: post_id [LONG] id of post to update [optional]
+    :param: title [STR] post title [optional]
+    :param: body [STR] post body [optional]
+    :param: published [BOOL] post published flag [optional]
+    :param: tags [LIST] list of tags[optional]
+    :return: success [BOOL] success or failure
     """
-    post_id = long(request.GET.get("id")) if "id" in request.GET else None
-
     # Create or retrieve Post
     if post_id:
         post = Post.get_by_id(post_id, parent=get_blog_key())
@@ -99,14 +93,13 @@ def update_post(request):
         post = Post(parent=get_blog_key())
 
     # Update Post
-    if "body" in request.GET:
-        post.body = request.GET.get("body")
-    if "title" in request.GET:
-        post.title = request.GET.get("title")
-    if "publish" in request.GET:
-        post.published = request.GET.get("publish", "").lower() in ["true", "1"]
-    if "tags" in request.GET:
-        post.tags = json.loads(request.GET.get("tags").lower()) if "tags" in request.GET else []
+    if body is not None:
+        post.body = body
+    if title is not None:
+        post.title = title
+    if tags is not None:
+        post.tags = tags
+    post.published = published
 
     # Persist
     try:
@@ -118,40 +111,24 @@ def update_post(request):
 
     return HttpResponse(success)
 
-
-def pages(request):
+@require_http_methods(["GET"])
+@parse_parameters(json_list=["tags"])
+def pages(request, tags=None):
     """
     Get number of pages of Blog Posts
-    :param LIST of tags to filter on [optional]
+    :param tags [LIST] of tags to filter on [optional]
     :return: INT
     """
     # Grab all published Posts
     post_query = Post.query().filter(Post.published == True)
 
     # Apply Tag filter
-    tags = json.loads(request.GET.get("tags").lower()) if "tags" in request.GET else []
     if tags:
         post_query = post_query.filter(Post.tags.IN(tags))
 
     return HttpResponse(page_count(post_query.count(), POST_PAGE_SIZE))
 
-def post_page(request):
-    """
-    Get Page number of given Post
-    :param id LONG id of Post
-    :param tags LIST of tags to filter on [optional]
-    :return: INT
-    """
-    # Grab all published Posts
-    post_query = Post.query().filter(Post.published == True)
-
-    # Apply Tag filter
-    tags = json.loads(request.GET.get("tags").lower()) if "tags" in request.GET else []
-    if tags:
-        post_query = post_query.filter(Post.tags.IN(tags))
-
-    return HttpResponse(page_count(post_query.count(), POST_PAGE_SIZE))
-
+@require_http_methods(["GET"])
 def tags(request):
     """
     Get exhaustive list of Tags for published Posts
