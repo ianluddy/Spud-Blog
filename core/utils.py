@@ -1,9 +1,12 @@
-from django.http import HttpResponse
 from functools import wraps
-from google.appengine.ext import ndb
-from core.models import Post, Blog
-from core.constants import LOREM, POST_TAGS, POST_TITLES
-import json, random, time, logging
+import json
+
+from django.shortcuts import render_to_response
+from django.http import HttpResponse
+from core.models import Post, Blog, User, Token
+from core.constants import AUTH_COOKIE, LOGIN_PAGE
+
+#### Utils ####
 
 def format_datetime(dtime):
     # Format datetime
@@ -24,6 +27,20 @@ def page_count(object_count, page_size):
         count += 1
     return count
 
+#### Auth ####
+
+def valid_auth_cookie(token_value):
+    # Validate our token, make sure a User exists
+    return bool(Token.query(Token.value == token_value, ancestor=get_blog_key()).fetch())
+
+def log_user_in():
+    # Create a Session token and return it's value
+    new_token = Token(parent=get_blog_key())
+    new_token.put()
+    return new_token.value
+
+#### Database ####
+
 def tag_filter(request, query):
     # Pull tags from request and apply to query
     tags = json.loads(request.GET.get("tags", "[]"))
@@ -38,29 +55,18 @@ def initialise_db():
         blog_instance = Blog()
         blog_instance.put()
 
-    # Put some initial test data in the DB
-    if not Post.query().fetch():
-        for i in range(12):
-            time.sleep(0.1)
-            add_post(str(i) + ": " + random.choice(POST_TITLES), LOREM, [random.choice(POST_TAGS)], blog_instance)
-
-def add_post(title, body, tags, parent):
-    # Create a Post object and persist
-    Post(
-        parent=parent.key,
-        title=title,
-        body=body,
-        tags=tags,
-        published=random.choice([True, True, False])
-    ).put()
+    # Create Users
+    if not User.query().fetch():
+        User(
+            username='admin', # TODO - not this
+            password='admin'
+        ).put()
 
 def get_blog_key():
     # Return our Blog key. There should only be one instance of Blog. This is used as an ancestor to all Posts.
     return Blog.query().get().key
 
-def empty_table(model):
-    # Empty given table
-    ndb.delete_multi(model.query().fetch(keys_only=True))
+#### Decorators ####
 
 def parse_parameters(str_list=[], bool_list=[], json_list=[], int_list=[]):
     # Parse parameters from the request object and cast to whatever we think they should be
@@ -87,5 +93,29 @@ def parse_parameters(str_list=[], bool_list=[], json_list=[], int_list=[]):
                 keyword_args[key] = long(request.GET.get(key)) if key in request.GET else None
 
             return view(request, *args, **keyword_args)
+        return wrapper
+    return decorator
+
+def authenticate_user():
+    # Authenticate user
+    def decorator(view):
+        @wraps(view)
+        def wrapper(request, *args, **kwargs):
+
+            # Look for an auth cookie and validate it
+            authorised = True
+            if AUTH_COOKIE not in request.COOKIES:
+                # Auth cookie not found so redirect
+                authorised = False
+            elif not valid_auth_cookie(request.COOKIES.get(AUTH_COOKIE)):
+                # Auth cookie not tied to a valid User
+                authorised = False
+
+            # Redirect to Login if unauthorised, otherwise return what was asked for
+            if authorised:
+                return view(request, *args, **kwargs)
+            else:
+                return render_to_response(LOGIN_PAGE, {})
+
         return wrapper
     return decorator

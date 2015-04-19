@@ -1,18 +1,46 @@
 from django.views.generic import TemplateView
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.views.decorators.http import require_http_methods
+from django.shortcuts import render_to_response
 import logging
 
-from core.constants import POST_PAGE_SIZE
-from core.models import Post
-from core.utils import json_response, flatten_list, page_count, get_blog_key, parse_parameters
+from core.constants import POST_PAGE_SIZE, AUTH_COOKIE, SESSION_EXPIRY, INDEX_PAGE, LOGIN_PAGE, ADMIN_PAGE
+from core.models import Post, User
+from core.utils import json_response, flatten_list, page_count, get_blog_key, parse_parameters, authenticate_user, \
+    log_user_in
+from core.utils import json_response
 
 ######## Pages ########
 
-index = TemplateView.as_view(template_name='index.html')  # Public page
-admin = TemplateView.as_view(template_name='admin.html')  # Admin page
+index = TemplateView.as_view(template_name=INDEX_PAGE)  # Public page
+login = TemplateView.as_view(template_name=LOGIN_PAGE)  # Login page
 
-######## API ########
+@authenticate_user()
+@require_http_methods(["GET"])
+def admin(request):
+    """
+    Admin Page
+    """
+    return render_to_response(ADMIN_PAGE, {})
+
+######## JSON API ########
+
+@require_http_methods(["GET", "POST"])
+@parse_parameters(str_list=["username", "password"])
+def authenticate(request, username=None, password=None):
+    """
+    Authenticate User, create Session token and return it's value in a Cookie
+    :param username [STRING]
+    :param password [PASSWORD]
+    :return: 200 or 403
+    """
+    user = User.query(User.username == username, User.password == password).get()
+    if user:
+        response = render_to_response(ADMIN_PAGE, {})
+        response.set_cookie(AUTH_COOKIE, log_user_in(), max_age=SESSION_EXPIRY)
+        return response
+    else:
+        return HttpResponseForbidden()
 
 @require_http_methods(["GET"])
 @parse_parameters(bool_list=["titles_only", "published_only"], json_list=["tags"], int_list=["page", "post_id"])
@@ -56,6 +84,7 @@ def posts(request, post_id=None, tags=None, page=None, titles_only=False, publis
 
     return response
 
+@authenticate_user()
 @require_http_methods(["GET", "POST"])
 @parse_parameters(int_list=["post_id"])
 def delete_post(request, post_id):
@@ -74,6 +103,7 @@ def delete_post(request, post_id):
 
     return HttpResponse(success)
 
+@authenticate_user()
 @require_http_methods(["GET", "POST"])
 @parse_parameters(str_list=["title", "body"], bool_list=["published"], json_list=["tags"], int_list=["post_id"])
 def update_post(request, post_id=None, title=None, body=None, published=False, tags=None):

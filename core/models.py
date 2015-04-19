@@ -1,11 +1,32 @@
 from google.appengine.ext import ndb
+from constants import SESSION_EXPIRY
 import time
+import uuid
+
+class User(ndb.Model):
+    """
+    User
+    """
+    username = ndb.StringProperty()
+    password = ndb.StringProperty()
+
+class Token(ndb.Model):
+    """
+    Auth token representing a User Session
+    """
+    value = ndb.StringProperty(default=str(uuid.uuid4()))
+    expires = ndb.IntegerProperty(default=int(time.time() + SESSION_EXPIRY))
 
 class Blog(ndb.Model):
-    stamp = ndb.FloatProperty(default=time.time())
+    """
+    Blog [Ancestor for all of our Posts to ensure consistency]
+    """
     name = ndb.StringProperty()
 
 class Post(ndb.Model):
+    """
+    Blog Post
+    """
     stamp = ndb.FloatProperty(default=time.time())
     title = ndb.StringProperty(default="Untitled")
     body = ndb.TextProperty(default="Empty")

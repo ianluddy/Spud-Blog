@@ -27,14 +27,7 @@ CACHES = {
 # If you are using CloudSQL, you can comment out the next line
 TEST_RUNNER = 'lib.testrunnernodb.TestRunnerNoDb'
 
-"""
-Custom session engine using our cache or writing through to the datastore If
-using SQL, can we use django's standard write through?  If gae memecached is
-stable enough, it would be faster to use
-django.contrib.sessions.backends.cache?
-"""
 SESSION_ENGINE = "appengine_sessions.backends.cached_db"
-
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -175,10 +168,3 @@ LOGGING = {
 ALLOWED_HOSTS = [
     'luddy-spud.appspot.com'
 ]
-
-print "STATICFILES_DIRS"
-print STATICFILES_DIRS
-print "TEMPLATE_DIRS"
-print TEMPLATE_DIRS
-print "DEBUG"
-print DEBUG

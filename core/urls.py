@@ -4,6 +4,8 @@ from django.conf.urls.defaults import url, patterns
 urlpatterns = patterns('core.views',
     url(r'^$', 'index', {}, name='index'),
     url(r'^admin', 'admin', {}, name='admin'),
+    url(r'^login', 'login', {}, name='login'),
+    url(r'^authenticate', 'authenticate', {}, name='authenticate'),
     url(r'^posts', 'posts', {}, name='posts'),
     url(r'^update_post', 'update_post', {}, name='update_post'),
     url(r'^delete_post', 'delete_post', {}, name='delete_post'),
