@@ -9,3 +9,9 @@
     color: red !important;
     font-weight: bold !important;
 }
+
+@media (max-width: 680px) {
+    .footer{
+        display: none;
+    }
+}

@@ -70,8 +70,8 @@ def initialise_db():
     # Create Users
     if not User.query().fetch():
         User(
-            username='spudmin',
-            password='spudmin'  # TODO - obfuscate this
+            username='admin',
+            password='admin'  # TODO - obfuscate this
         ).put()
 
 def get_blog_key():
