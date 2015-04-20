@@ -18,7 +18,6 @@ if not os.getenv('APPENGINE_PRODUCTION'):
     logging.info('Development django: %s' % django.__file__)
     logging.info(django.get_version())
 
-
 # Log exceptions
 def log_exception(*args, **kwds):
     logging.exception('Exception in request:')

@@ -7,7 +7,10 @@ POST_PAGE_SIZE = 1
 SESSION_EXPIRY = 60 * 30  # 30 mins
 
 # Auth Cookie Name
-AUTH_COOKIE = "spud"
+AUTH_COOKIE_KEY = "spud"
+
+# Max number of Posts allowed. Auto cleanup when this count is exceeded
+MAX_NUMBER_OF_POSTS = 20
 
 # Pages
 INDEX_PAGE = 'index.html'

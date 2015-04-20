@@ -1,37 +1,42 @@
 {% extends "base.html" %}
 
+<!-- CSS Import -->
+{% block importCSS %}
+    <link rel="stylesheet" href="/css/login.css"/>
+    <link rel="stylesheet" href="/css/alertify.default.css"/>
+    <link rel="stylesheet" href="/css/alertify.core.css"/>
+{% endblock %}
+
 <!-- JS Import -->
 {% block importJS %}
+    <script type="text/javascript" src="js/vendor/alertify.min.js"></script>
+    <script type="text/javascript" src="js/messages.js"></script>
     <script type="text/javascript" src="js/login.js"></script>
 {% endblock %}
 
+<!-- Login Page -->
 {% block main %}
     <div class="row">
         <div class="large-6 columns">
             <div class="row collapse prefix-radius">
                 <div class="small-3 columns">
-                    <span class="prefix">Username</span>
+                    <span class="username prefix">Username</span>
                 </div>
                 <div class="small-9 columns">
-                    <input id="username" type="text" placeholder="username">
+                    <input id="username" type="text" placeholder="username" tabindex="1">
                 </div>
             </div>
             <div class="row collapse prefix-radius">
                 <div class="small-3 columns">
-                    <span class="prefix">Password</span>
+                    <span class="password prefix">Password</span>
                 </div>
                 <div class="small-9 columns">
-                    <input id="password" type="text" placeholder="password">
+                    <input id="password" type="password" placeholder="password" tabindex="2">
                 </div>
             </div>
         </div>
         <div class="large-12 columns">
-            <a id="login_button" class="button success">Login</a>
+            <a id="login_button" class="button success" tabindex="3">Login</a>
         </div>
     </div>
-{% endblock %}
-
-<!-- Template CSS -->
-{% block importCSS %}
-    <link rel="stylesheet" href="/css/login.css" />
 {% endblock %}

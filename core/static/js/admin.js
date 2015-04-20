@@ -1,16 +1,6 @@
 var post_list_container, post_list_tmpl, editor, new_post_btn, tag_container, about, about_handle, admin_page;
-var tag_tmpl, tag_input, save_post_btn, title_input, publish_input, post_editor, post_body, selected_post;
+var tag_tmpl, tag_input, save_post_btn, title_input, publish_input, post_editor, post_body, selected_post, log_out_btn;
 var unsaved_changes = false;
-
-/**** Messages ****/
-var msg_unsaved = "Unsaved changes to current Post. Discard?";
-var msg_delete = "Are you sure you want to delete this Post?";
-var msg_deleted = "Post deleted";
-var msg_delete_error = "Error deleting Post";
-var msg_saved = "Changes saved";
-var msg_save_error = "Error saving changes. Illegal characters in Post body";
-var msg_created = "New Post created";
-var msg_create_error = "Error creating new Post";
 
 $(document).ready(function() {
     cache_elements();
@@ -24,6 +14,7 @@ $(document).ready(function() {
 function cache_elements(){
     // DOM
     admin_page = $("#admin");
+    log_out_btn = $("#log_out");
     new_post_btn = $("#new_post");
     save_post_btn = $("#save_post_btn");
     post_list_container = $("#post_preview_list");
@@ -43,6 +34,7 @@ function cache_elements(){
 
 function add_handlers(){
     $(new_post_btn).on("click", new_post);
+    $(log_out_btn).on("click", log_out);
     $(save_post_btn).on("click", save_post);
     $(title_input).on("change", changes_pending);
     $(title_input).on("keyup", changes_pending);
@@ -109,9 +101,9 @@ function save_post(){
             "published": get_published()
         }
     }).success(
-        function(){load_post_list(); alertify.success(msg_saved);}
+        function(){load_post_list(); alertify.success(admin_saved);}
     ).error(
-        function(){alertify.error(msg_save_error);}
+        function(){alertify.error(admin_save_error);}
     )
 }
 
@@ -161,9 +153,9 @@ function new_post(){
         $.ajax({
             url: "update_post"
         }).success(
-            function(){load_post_list(); alertify.success(msg_created);}
+            function(){load_post_list(); alertify.success(admin_created);}
         ).error(
-            function(){alertify.error(msg_create_error);}
+            function(){alertify.error(admin_create_error);}
         )
     }
 }
@@ -197,16 +189,16 @@ function load_post(post){
 
 function delete_post(){
     // Delete given Post
-    if( confirm(msg_delete) ){
+    if( confirm(admin_delete) ){
         $.ajax({
             url: "delete_post",
             data: {
                 post_id: $(this).attr("post_id")
             }
         }).success(
-            function(){load_post_list(); alertify.success(msg_deleted);}
+            function(){load_post_list(); alertify.success(admin_deleted);}
         ).error(
-            function(){alertify.error(msg_delete_error);}
+            function(){alertify.error(admin_delete_error);}
         )
     }
 }
@@ -236,10 +228,23 @@ function confirm_changes(){
     // Prompt user before discarding unsaved changes
     if( unsaved_changes == false ){
         return true;
-    }else if( confirm(msg_unsaved) == true ){
+    }else if( confirm(admin_unsaved) == true ){
         changes_made();
         return true;
     }else{
         return false;
     }
+}
+
+/**** Log Out ****/
+function log_out(){
+    // Log user out
+    $.ajax({
+        url: "log_out"
+    }).done(
+        function(){
+            window.location.href = "/";
+            location.reload();
+        }
+    )
 }

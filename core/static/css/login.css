@@ -1,7 +1,11 @@
-/* Footer */
 .footer {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
+}
+
+.login_error{
+    color: red !important;
+    font-weight: bold !important;
 }

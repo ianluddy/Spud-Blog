@@ -1,10 +1,13 @@
 from functools import wraps
 import json
+import time
+import logging
 
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
+from google.appengine.ext import ndb
 from core.models import Post, Blog, User, Token
-from core.constants import AUTH_COOKIE, LOGIN_PAGE
+from core.constants import AUTH_COOKIE_KEY, LOGIN_PAGE, MAX_NUMBER_OF_POSTS
 
 #### Utils ####
 
@@ -31,13 +34,22 @@ def page_count(object_count, page_size):
 
 def valid_auth_cookie(token_value):
     # Validate our token, make sure a User exists
-    return bool(Token.query(Token.value == token_value, ancestor=get_blog_key()).fetch())
+    token = Token.query(Token.value == token_value, ancestor=get_blog_key()).get()
+    if token:
+        token.refresh()
+    return bool(token)
 
 def log_user_in():
     # Create a Session token and return it's value
     new_token = Token(parent=get_blog_key())
     new_token.put()
     return new_token.value
+
+def log_user_out(token):
+    # Delete the given Session token
+    token = Token.query(Token.value == token, ancestor=get_blog_key()).get()
+    if token:
+        token.key.delete()
 
 #### Database ####
 
@@ -58,8 +70,8 @@ def initialise_db():
     # Create Users
     if not User.query().fetch():
         User(
-            username='admin', # TODO - not this
-            password='admin'
+            username='spudmin',
+            password='spudmin'  # TODO - obfuscate this
         ).put()
 
 def get_blog_key():
@@ -104,10 +116,10 @@ def authenticate_user():
 
             # Look for an auth cookie and validate it
             authorised = True
-            if AUTH_COOKIE not in request.COOKIES:
+            if AUTH_COOKIE_KEY not in request.COOKIES:
                 # Auth cookie not found so redirect
                 authorised = False
-            elif not valid_auth_cookie(request.COOKIES.get(AUTH_COOKIE)):
+            elif not valid_auth_cookie(request.COOKIES.get(AUTH_COOKIE_KEY)):
                 # Auth cookie not tied to a valid User
                 authorised = False
 
@@ -119,3 +131,14 @@ def authenticate_user():
 
         return wrapper
     return decorator
+
+#### Clean Up ####
+
+def clean_session_tokens():
+    # Remove expired Tokens
+    ndb.delete_multi(Token.query(Token.expires < int(time.time())).fetch(keys_only=True))
+
+def clean_posts():
+    # Remove posts if we have exceeded the limit
+    for expired_post in Post.query().order(-Post.stamp).fetch()[MAX_NUMBER_OF_POSTS:]:
+        expired_post.key.delete()

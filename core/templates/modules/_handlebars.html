@@ -1,77 +1,78 @@
 {% verbatim %}
-    <script id="post_tmpl" type="text/x-handlebars-template">
-        <div class="post">
-            <article>
-                <h3><a>{{title}}</a></h3>
-                <div class="post_header">
-                    <span>
-                        <h6 class="post_stamp">{{hb_stamp stamp}}</h6>
-                    </span>
-                    <span class="post_tags">
-                        {{#tags}}
-                            <span class="success label">{{this}}</span>
-                        {{/tags}}
-                    </span>
+<script id="post_tmpl" type="text/x-handlebars-template">
+    <div class="post">
+        <article>
+            <h3><a>{{title}}</a></h3>
+            <div class="post_header">
+                <span>
+                    <h6 class="post_stamp">{{hb_stamp stamp}}</h6>
+                </span>
+                <span class="post_tags">
+                    {{#tags}}
+                        <span class="success label">{{this}}</span>
+                    {{/tags}}
+                </span>
+            </div>
+            <div class="row">
+                <div class="large-12 columns">
+                    {{{body}}}
                 </div>
-                <div class="row">
-                    <div class="large-12 columns">
-                        {{{body}}}
-                    </div>
-                </div>
-            </article>
-            <hr/>
-        </div>
-        <div id="facebook_comment_box" class="fb-comments" data-href={{link}}" data-numposts="5" data-colorscheme="light"></div>
-    </script>
+            </div>
+        </article>
+        <hr/>
+    </div>
+    <div id="facebook_comment_box" class="fb-comments" data-href={{link}}" data-numposts="5" data-colorscheme="light">
+    </div>
+</script>
 
-    <script id="tag_tmpl" type="text/x-handlebars-template">
-        <span class="success label">{{this}}</span>
-    </script>
+<script id="tag_tmpl" type="text/x-handlebars-template">
+    <span class="success label">{{this}}</span>
+</script>
 
-    <script id="editable_tag_tmpl" type="text/x-handlebars-template">
-        <span class="post_tag">
+<script id="editable_tag_tmpl" type="text/x-handlebars-template">
+    <span class="post_tag">
             <span class="success label">
                 {{this}}
             </span>
             <span class="remove fi-x-circle"></span>
         </span>
-    </script>
+</script>
 
-    <script id="paginator_tmpl" type="text/x-handlebars-template">
-        <li class="arrow"><a>Previous &laquo;</a></li>
-        {{#pages}}
-            <li class="pag"><a>{{this}}</a></li>
-        {{/pages}}
-        <li class="arrow"><a>Next &raquo;</a></li>
-    </script>
+<script id="paginator_tmpl" type="text/x-handlebars-template">
+    <li class="arrow"><a>Previous &laquo;</a></li>
+    {{#pages}}
+        <li class="pag"><a>{{this}}</a></li>
+    {{/pages}}
+    <li class="arrow"><a>Next &raquo;</a></li>
+</script>
 
-    <script id="post_preview_tmpl" type="text/x-handlebars-template">
-        <div class="post_preview" post_id="{{id}}">
-            <div class="icons">
-                <div class="delete fi-trash" post_id="{{id}}" title="Delete Post"></div>
-            </div>
-            <div class="title">
-                {{#eq published true}}
-                    <span class="published fi-megaphone" title="Published"></span>
-                {{else}}
-                    <span class="unpublished fi-megaphone" title="Unpublished"></span>
-                {{/eq}}
-                {{title}}
-                <span class="unsaved">*</span>
-            </div>
-            <div class="stamp">{{hb_stamp stamp}}</div>
+<script id="post_preview_tmpl" type="text/x-handlebars-template">
+    <div class="post_preview" post_id="{{id}}">
+        <div class="icons">
+            <div class="delete fi-trash" post_id="{{id}}" title="Delete Post"></div>
         </div>
-    </script>
-
-    <script id="loader_tmpl" type="text/x-handlebars-template">
-        <div class="loader_overlay">
-            <div class="spinner">
-              <div class="rect1"></div>
-              <div class="rect2"></div>
-              <div class="rect3"></div>
-              <div class="rect4"></div>
-              <div class="rect5"></div>
-            </div>
+        <div class="title">
+            {{#eq published true}}
+                <span class="published fi-megaphone" title="Published"></span>
+            {{else}}
+                <span class="unpublished fi-megaphone" title="Unpublished"></span>
+            {{/eq}}
+            {{title}}
+            <span class="unsaved">*</span>
         </div>
-    </script>
+        <div class="stamp">{{hb_stamp stamp}}</div>
+    </div>
+</script>
+
+<script id="loader_tmpl" type="text/x-handlebars-template">
+    <div class="loader_overlay">
+        <div class="spinner">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+        </div>
+    </div>
+</script>
 {% endverbatim %}

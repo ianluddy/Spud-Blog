@@ -2,15 +2,16 @@
 
 <!-- CSS Import -->
 {% block importCSS %}
-    <link rel="stylesheet" href="/css/alertify.default.css" />
-    <link rel="stylesheet" href="/css/alertify.core.css" />
-    <link rel="stylesheet" href="/css/admin.css" />
+    <link rel="stylesheet" href="/css/alertify.default.css"/>
+    <link rel="stylesheet" href="/css/alertify.core.css"/>
+    <link rel="stylesheet" href="/css/admin.css"/>
 {% endblock %}
 
 <!-- JS Import -->
 {% block importJS %}
     <script type="text/javascript" src="js/vendor/alertify.min.js"></script>
     <script type="text/javascript" src="js/vendor/textboxio.js"></script>
+    <script type="text/javascript" src="js/messages.js"></script>
     <script type="text/javascript" src="js/admin.js"></script>
 {% endblock %}
 
@@ -63,6 +64,7 @@
         <aside class="large-4 columns">
             <a id="save_post_btn" class="button expand">Save <span class="fi-save"></span></a>
             <a id="new_post" class="button expand">New Post <span class="fi-page-edit"></span></a>
+
             <div id="post_preview_list"></div>
         </aside>
     </div>

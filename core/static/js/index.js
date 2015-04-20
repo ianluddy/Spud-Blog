@@ -179,7 +179,7 @@ function validate_page_number(page_number){
     // Validate selected page number. Revert to 1 if invalid
     try {
         page_number = parseInt(page_number);
-        if( page_number < 1 )
+        if( page_number < 1 || isNaN(page_number) || page_number.toString().length > 7 )
             return 1;
         return page_number;
     }catch(err){

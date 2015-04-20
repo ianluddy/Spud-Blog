@@ -67,8 +67,6 @@
     margin: 0 0 0 0.2rem;
 }
 
-
-
 /* Alertify */
 .alertify-log-success, .alertify-log-error{
     font-family: 'Open Sans', sans-serif !important;
@@ -76,4 +74,9 @@
 }
 .alertify-log-success{
     background-color: #7C583D !important;
+}
+
+/* Footer */
+#log_out{
+    display: inline;
 }

@@ -292,6 +292,9 @@ ul.pagination li.current button {
     position: relative;
     top: 0.2em;
 }
+#log_out{
+    display: none;
+}
 
 .footer .links a:hover span {
     color: #DDAD76;

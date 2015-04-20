@@ -4,13 +4,12 @@ from django.views.decorators.http import require_http_methods
 from django.shortcuts import render_to_response
 import logging
 
-from core.constants import POST_PAGE_SIZE, AUTH_COOKIE, SESSION_EXPIRY, INDEX_PAGE, LOGIN_PAGE, ADMIN_PAGE
+from core.constants import POST_PAGE_SIZE, AUTH_COOKIE_KEY, SESSION_EXPIRY, INDEX_PAGE, LOGIN_PAGE, ADMIN_PAGE
 from core.models import Post, User
-from core.utils import json_response, flatten_list, page_count, get_blog_key, parse_parameters, authenticate_user, \
-    log_user_in
-from core.utils import json_response
+from core.utils import flatten_list, page_count, get_blog_key, parse_parameters, authenticate_user
+from core.utils import json_response, log_user_in, log_user_out, clean_session_tokens, clean_posts
 
-######## Pages ########
+#### Pages ####
 
 index = TemplateView.as_view(template_name=INDEX_PAGE)  # Public page
 login = TemplateView.as_view(template_name=LOGIN_PAGE)  # Login page
@@ -18,12 +17,9 @@ login = TemplateView.as_view(template_name=LOGIN_PAGE)  # Login page
 @authenticate_user()
 @require_http_methods(["GET"])
 def admin(request):
-    """
-    Admin Page
-    """
     return render_to_response(ADMIN_PAGE, {})
 
-######## JSON API ########
+#### Auth ####
 
 @require_http_methods(["GET", "POST"])
 @parse_parameters(str_list=["username", "password"])
@@ -37,10 +33,21 @@ def authenticate(request, username=None, password=None):
     user = User.query(User.username == username, User.password == password).get()
     if user:
         response = render_to_response(ADMIN_PAGE, {})
-        response.set_cookie(AUTH_COOKIE, log_user_in(), max_age=SESSION_EXPIRY)
+        response.set_cookie(AUTH_COOKIE_KEY, log_user_in(), max_age=SESSION_EXPIRY)
         return response
     else:
         return HttpResponseForbidden()
+
+@require_http_methods(["GET"])
+def log_out(request):
+    """
+    Log User out by grabbing the login token from the Cookie and removing it
+    :return: Login Page
+    """
+    log_user_out(request.COOKIES.get(AUTH_COOKIE_KEY))
+    return render_to_response(LOGIN_PAGE, {})
+
+#### API ####
 
 @require_http_methods(["GET"])
 @parse_parameters(bool_list=["titles_only", "published_only"], json_list=["tags"], int_list=["page", "post_id"])
@@ -52,7 +59,7 @@ def posts(request, post_id=None, tags=None, page=None, titles_only=False, publis
     :param titles_only [BOOLEAN] return Post titles and stamps only [optional]
     :param published_only [BOOLEAN] return published Posts only [optional]
     :param post_id [LONG] Post identifier [optional]
-    :return: LIST
+    :return: posts [LIST] List of Posts
     """
     # ID filter (if we get an ID parameter lets assume the user wants all the info on that Post)
     if post_id:
@@ -90,8 +97,8 @@ def posts(request, post_id=None, tags=None, page=None, titles_only=False, publis
 def delete_post(request, post_id):
     """
     Delete Blog Post
-    :param: post_id LONG id of post to delete
-    :return: BOOL success or failure
+    :param: post_id [LONG] id of post to delete
+    :return: success [BOOL] success or failure
     """
     # Attempt to delete the Post
     try:
@@ -147,7 +154,7 @@ def pages(request, tags=None):
     """
     Get number of pages of Blog Posts
     :param tags [LIST] of tags to filter on [optional]
-    :return: INT
+    :return: pages [INT] number of pages
     """
     # Grab all published Posts
     post_query = Post.query().filter(Post.published == True)
@@ -162,7 +169,7 @@ def pages(request, tags=None):
 def tags(request):
     """
     Get exhaustive list of Tags for published Posts
-    :return: LIST of Post tags
+    :return: tags [LIST] list of Post tags
     """
     # Grab all published Posts
     post_query = Post.query(ancestor=get_blog_key()).filter(Post.published == True)
@@ -171,3 +178,18 @@ def tags(request):
     tags = list(set(flatten_list([post.tags for post in post_query.iter()])))
 
     return json_response(tags)
+
+#### Clean Up ####
+
+@require_http_methods(["GET"])
+def clean(request):
+    """
+    Cron endpoint to run cleanup jobs
+    :return:
+    """
+    try:
+        clean_session_tokens()
+        clean_posts()
+        return HttpResponse(True)
+    except Exception:
+        return HttpResponse(False)

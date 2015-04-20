@@ -17,9 +17,13 @@ class Token(ndb.Model):
     value = ndb.StringProperty(default=str(uuid.uuid4()))
     expires = ndb.IntegerProperty(default=int(time.time() + SESSION_EXPIRY))
 
+    def refresh(self):
+        self.expires = int(time.time() + SESSION_EXPIRY)
+        self.put()
+
 class Blog(ndb.Model):
     """
-    Blog [Ancestor for all of our Posts to ensure consistency]
+    Blog [Ancestor for all of our entities to ensure consistency]
     """
     name = ndb.StringProperty()
 

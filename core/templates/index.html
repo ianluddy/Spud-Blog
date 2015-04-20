@@ -1,5 +1,24 @@
 {% extends "base.html" %}
 
+<!-- CSS Import -->
+{% block importCSS %}
+{% endblock %}
+
+<!-- JS Import -->
+{% block importJS %}
+    <div id="fb-root"></div>
+    <script src="js/index.js"></script>
+    <script>(function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.3&appId=293357874188447";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+{% endblock %}
+
+<!-- Index Page -->
 {% block main %}
     <div class="row">
         <div id="posts" class="large-9 columns" role="content">
@@ -7,29 +26,22 @@
         </div>
         <aside class="large-3 columns">
             <h5>Tags</h5>
+
             <div id="tags"></div>
             <div>
-                <a class="twitter-timeline" href="https://twitter.com/potatolondon" data-widget-id="586255659395612673">Tweets by @potatolondon</a>
-                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                <a class="twitter-timeline" href="https://twitter.com/potatolondon" data-widget-id="586255659395612673">Tweets
+                    by @potatolondon</a>
+                <script>!function (d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+                    if (!d.getElementById(id)) {
+                        js = d.createElement(s);
+                        js.id = id;
+                        js.src = p + "://platform.twitter.com/widgets.js";
+                        fjs.parentNode.insertBefore(js, fjs);
+                    }
+                }(document, "script", "twitter-wjs");</script>
                 <a class="feed_link" href="https://twitter.com/potatolondon">Read More →</a>
             </div>
         </aside>
     </div>
-{% endblock %}
-
-<!-- Template CSS -->
-{% block importCSS %}
-{% endblock %}
-
-<!-- Template JS -->
-{% block importJS %}
-    <div id="fb-root"></div>
-    <script src="js/index.js"></script>
-    <script>(function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.3&appId=293357874188447";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
 {% endblock %}
