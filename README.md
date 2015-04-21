@@ -1,5 +1,7 @@
 # Spud-Blog
 Lightweight blogging tool written with Django and deployed using Google App Engine
+
+
 [luddy-spud.appspot.com/](http://luddy-spud.appspot.com/)
 
 #### Stack
