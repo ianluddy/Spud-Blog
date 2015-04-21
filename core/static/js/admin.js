@@ -103,7 +103,7 @@ function save_post(){
     }).success(
         function(){load_post_list(); alertify.success(admin_saved);}
     ).error(
-        function(){alertify.error(admin_save_error);}
+        function(){hide_loader(post_editor); alertify.error(admin_save_error);}
     )
 }
 
