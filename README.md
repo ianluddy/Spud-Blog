@@ -13,8 +13,3 @@ Lightweight blogging tool written with Django and deployed using Google App Engi
 * [Moment.js](http://momentjs.com/)
 * [Handlebars.js](http://handlebarsjs.com/)
 * [Alertify.js](http://fabien-d.github.io/alertify.js/)
-
-#### Requirements
-
-* Python 2.7
-* Google App Engine
